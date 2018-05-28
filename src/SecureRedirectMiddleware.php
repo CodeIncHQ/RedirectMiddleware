@@ -50,12 +50,27 @@ class SecureRedirectMiddleware extends RedirectMiddleware
      * @param string $jwtKey
      * @param string $uriPath
      * @param string $queryPrameter
+     * @throws RedirectMiddlewareException
      */
     public function __construct(string $jwtKey, string $uriPath = self::DEFAULT_URI_PATH,
         string $queryPrameter = self::DEFAULT_QUERY_PARAMETER)
     {
-        $this->jwtKey = $jwtKey;
+        $this->setJwtKey($jwtKey);
         parent::__construct($uriPath, $queryPrameter);
+    }
+
+    /**
+     * Sets the JWT key.
+     *
+     * @param string $jwtKey
+     * @throws RedirectMiddlewareException
+     */
+    protected function setJwtKey(string $jwtKey):void
+    {
+        if (empty($jwtKey)) {
+            throw new RedirectMiddlewareException("The JWT key can not be empty", $this);
+        }
+        $this->jwtKey = $jwtKey;
     }
 
     /**
@@ -66,8 +81,8 @@ class SecureRedirectMiddleware extends RedirectMiddleware
      */
     protected function getRequestRedirectUrl(ServerRequestInterface $request):?string
     {
-            if (isset($request->getQueryParams()[$this->queryParameter])) {
-                return $this->decodeUrlJwt($request->getQueryParams()[$this->queryParameter]);
+            if (isset($request->getQueryParams()[$this->getQueryParameter()])) {
+                return $this->decodeUrlJwt($request->getQueryParams()[$this->getQueryParameter()]);
             }
             return null;
 

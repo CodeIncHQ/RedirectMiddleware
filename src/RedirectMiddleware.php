@@ -45,12 +45,12 @@ class RedirectMiddleware implements MiddlewareInterface
     /**
      * @var string
      */
-    protected $uriPath;
+    private $uriPath;
 
     /**
      * @var string
      */
-    protected $queryParameter;
+    private $queryParameter;
 
     /**
      * RedirectMiddleware constructor.
@@ -63,6 +63,22 @@ class RedirectMiddleware implements MiddlewareInterface
     {
         $this->uriPath = $uriPath;
         $this->queryParameter = $queryPrameter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUriPath():string
+    {
+        return $this->uriPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQueryParameter():string
+    {
+        return $this->queryParameter;
     }
 
     /**
@@ -91,8 +107,8 @@ class RedirectMiddleware implements MiddlewareInterface
      */
     protected function isRedirectRequest(ServerRequestInterface $request):bool
     {
-        return $request->getUri()->getPath() == $this->uriPath
-            && isset($request->getQueryParams()[$this->queryParameter]);
+        return $request->getUri()->getPath() == $this->getUriPath()
+            && isset($request->getQueryParams()[$this->getQueryParameter()]);
     }
 
     /**
@@ -101,7 +117,7 @@ class RedirectMiddleware implements MiddlewareInterface
      */
     protected function getRequestRedirectUrl(ServerRequestInterface $request):?string
     {
-        return $request->getQueryParams()[$this->queryParameter] ?? null;
+        return $request->getQueryParams()[$this->getQueryParameter()] ?? null;
     }
 
     /**
@@ -112,6 +128,6 @@ class RedirectMiddleware implements MiddlewareInterface
      */
     public function builRedirectUri(string $destinationUrl):string
     {
-        return "$this->uriPath?$this->queryParameter=".urlencode($destinationUrl);
+        return "{$this->getUriPath()}?{$this->getQueryParameter()}=".urlencode($destinationUrl);
     }
 }
