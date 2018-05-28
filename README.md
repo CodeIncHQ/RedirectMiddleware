@@ -1,6 +1,6 @@
 # Redirect Middleware
 
-The PSR 7.1 library provides PSR-15 middleware to handle redirections. `RedirectMiddleware` is the base middleware using redirect URIs as `go?to=https://www.example.org` while `SecureRedirectMiddleware` uses the `firebase/php-jwt` library to encrypt the redirect URL in a JSON web token.
+The PSR 7.1 library provides PSR-15 middleware to handle redirections. `RedirectMiddleware` is the base middleware using redirect URIs as `/go?to=https://www.example.org` while `SecureRedirectMiddleware` uses the [firebase/php-jwt](https://github.com/firebase/php-jwt) library to encrypt the redirect URL in a [JSON web token](https://jwt.io/).
 
  
 ## Installation
